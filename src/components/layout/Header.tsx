@@ -7,6 +7,7 @@ export default function Header() {
     const [cpf, setCpf] = useState("");
     const router = useRouter();
 
+
     const handlesearch = () => {
         if (cpf.trim()) {
             router.push(`/cliente/${cpf}`);
@@ -15,41 +16,30 @@ export default function Header() {
 
 
     return (
-        <header className="h-[100px] bg-gray-900 text-white flex items-center justify-between px-8 shadow-md">
+        <header className="bg-white shadow">
+            <nav className="mx-auto flex max-w-7xl text-black items-center justify-between p-6 lg:px-8" aria-label="Global">
 
-            <a href="/home" className="text-2xl font-bold">
-                Home
-            </a>
+                <div className="flex-1 gap-2 flex justify-center px-4">
+                    <input
+                        type="text"
+                        placeholder="Pesquisar CPF"
+                        className="w-full max-w-md rounded-md border border-gray-300 px-4 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    />
+                    <button className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                        Pesquisar
+                    </button>
+                </div>
 
-            <input
-                type="text"
-                placeholder="Digite O CPF Do Cliente"
-                className="p-3 rounded-md border border-gray-600 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        handlesearch();
-                    }
-                }}
-            />
 
-            <div className="flex gap-4">
-                <a
-                    href="/cliente"
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md font-semibold text-white"
-                >
-                    Nato-ID
-                </a>
-
-                <a
-                    href="/login"
-                    className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded-md font-semibold text-white"
-                >
-                    Login
-                </a>
-
-            </div>
+                <div className="flex gap-x-6">
+                    <a href="/login" className="text-sm font-semibold text-gray-900">Login</a>
+                    <a href="/cadastro" className="text-sm font-semibold text-gray-900">Cadastro</a>
+                    <a href="/clientes" className="text-sm font-semibold text-gray-900">Clientes</a>
+                </div>
+            </nav>
         </header>
-    );
+    )
 }
+
+
+
