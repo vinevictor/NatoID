@@ -1,18 +1,18 @@
 "use client"
 
-import { useRouter } from "next/navigation";
+//import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Header() {
     const [cpf, setCpf] = useState("");
-    const router = useRouter();
+ //   const router = useRouter();
 
 
-    const handlesearch = () => {
-        if (cpf.trim()) {
-            router.push(`/cliente/${cpf}`);
-        }
-    }
+   // const handlesearch = () => {
+     //   if (cpf.trim()) {
+       //     router.push(`/cliente/${cpf}`);
+        //}
+   // }
 
 
     return (
