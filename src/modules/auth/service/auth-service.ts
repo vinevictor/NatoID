@@ -10,7 +10,7 @@ async function openSessionToken(token: string) {
 }
 
 async function sessionUser(){
-  const cookie = cookies().get('session')
+  const cookie = (await cookies()).get('session')
   if(!cookie){
     return { error: true, message: "Nenhuma sessão encontrada", data: null }
   }
@@ -33,7 +33,7 @@ async function createSessionToken(payload = {}) {
   .sign(secret);
   const { exp } = await openSessionToken(session);
 
-  cookies().set('session', session, {
+  (await cookies()).set('session', session, {
     expires: (exp as number) * 1000,
     path: '/',
     httpOnly: true,
@@ -42,8 +42,8 @@ async function createSessionToken(payload = {}) {
 }
 
 async function isSessionValid() {
-    const sessionCookie = cookies().get('session')
-
+    const sessionCookie = (await cookies()).get('session')
+    
     if(sessionCookie){
         const { value } = sessionCookie
         const { exp } = await openSessionToken(value)
@@ -55,8 +55,8 @@ async function isSessionValid() {
     return false
 }
 
-function destroySession() {
-  cookies().delete('session')
+async function destroySession() {
+  (await cookies()).delete('session')
 }
 
 const AuthService = {

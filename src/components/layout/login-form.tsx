@@ -1,18 +1,16 @@
 "use client";
 
 import { login } from "../../modules/auth/actions/auth-action";
-import { useState } from "react";
-
 export default function LoginForm() {
-
-
-  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(formData: FormData) {
     const result = await login(formData);
-    if (result?.error) {
-      setError(result.message);
+    if (result.error) {
+      alert(result.message);
+    }else{
+      window.location.href = "/home"
     }
+
   }
 
   
