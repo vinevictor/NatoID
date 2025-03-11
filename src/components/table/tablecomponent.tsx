@@ -19,7 +19,7 @@ export function TableHeader({ children, className }: { children: React.ReactNode
 
 // TableRow.tsx
 export function TableRow({ children, className }: { children: React.ReactNode; className?: string }) {
-    return <tr className={className}>{children}</tr>;
+    return <tr className={className} >{children}</tr>;
 }
 
 // TableCell.tsx
