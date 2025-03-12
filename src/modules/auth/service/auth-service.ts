@@ -29,7 +29,7 @@ async function createSessionToken(payload = {}) {
   const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
   const session = await new jose.SignJWT(payload)
   .setProtectedHeader({ alg: "HS256" })
-  .setExpirationTime("1d")
+  .setExpirationTime("4h")
   .sign(secret);
   const { exp } = await openSessionToken(session);
 
