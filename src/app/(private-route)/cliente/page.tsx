@@ -31,7 +31,7 @@ export default function ClientePage() {
   const [telefoneFilter, setTelefoneFilter] = useState("");
 
   const statusClientOptions = ['INICIADO']
-  const statusOptions = ["AGUARDANDO", "APROVADO", "REJEITADO", ""];
+  const statusOptions = ["AGUARDANDO", "APROVADO", "REJEITADO", "", "ENVIADO"];
 
   useEffect(() => {
     fetchTable();
@@ -69,10 +69,10 @@ export default function ClientePage() {
           ...item,
           ...(biometria && { biometria }),
           ...(documento && { documento }),
-          ...(documento && documento.status
+          ...((documento && documento.status) && documento.arquivoDocumento
             ? { statusdocumento: documento.status }
             : { statusdocumento: "AGUARDANDO" }),
-          ...(biometria && biometria.status
+          ...((biometria && biometria.status) && biometria.dadosBiometricos
             ? { statusbiometria: biometria.status }
             : { statusbiometria: "AGUARDANDO" })
         };
@@ -358,7 +358,7 @@ export default function ClientePage() {
                           <TableCell>
                             <span
                               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                cliente.statusdocumento === "AGUARDANDO"
+                                cliente.statusdocumento === "ENVIADO"
                                   ? "bg-blue-600 text-white "
                                   : cliente.statusdocumento === "APROVADO"
                                   ? "bg-green-100 text-green-800"
@@ -373,7 +373,7 @@ export default function ClientePage() {
                           <TableCell>
                             <span
                               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                cliente.statusbiometria === "AGUARDANDO"
+                                cliente.statusbiometria === "ENVIADO"
                                   ? "bg-blue-600 text-white "
                                   : cliente.statusbiometria === "APROVADO"
                                   ? "bg-green-100 text-green-800"
