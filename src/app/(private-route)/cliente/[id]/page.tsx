@@ -5,6 +5,7 @@ import { Cliente } from "@/app/types/cliente.type";
 import { Documento } from "@/app/types/documeto.type";
 import { Urls } from "@/app/types/urls.type";
 import Image from "next/image";
+import Link from "next/link";
 import { use, useEffect, useState } from "react";
 
 type Props = {
@@ -15,7 +16,9 @@ export default function ClienteIdPage({ params }: Props) {
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [loading, setLoading] = useState(false);
   const [documento, setDocumento] = useState<Documento | null>(null);
+  console.log("🚀 ~ ClienteIdPage ~ documento:", documento)
   const [biometria, setBiometria] = useState<Biometria | null>(null);
+  console.log("🚀 ~ ClienteIdPage ~ biometria:", biometria)
   const [atualizarBiometria, setAtualizarBiometria] = useState(false);
   const [atualizarDocumento, setAtualizarDocumento] = useState(false);
   const [atualizarCliente, setAtualizarCliente] = useState(false);
@@ -132,6 +135,7 @@ export default function ClienteIdPage({ params }: Props) {
           throw new Error("Falha em atualizar o documento");
         }
         alert("Documento atualizado com sucesso");
+        fetchCliente();
       } catch (error) {
         alert(error);
       }
@@ -153,6 +157,7 @@ export default function ClienteIdPage({ params }: Props) {
           throw new Error("Falha em atualizar o documento");
         }
         alert("Documento atualizado com sucesso");
+        fetchCliente();
       } catch (error) {
         alert(error);
       }
@@ -160,6 +165,8 @@ export default function ClienteIdPage({ params }: Props) {
     setAtualizarDocumento(false);
     fetchCliente();
   };
+
+
 
   const handleAtualizarBiometria = async () => {
     if (atualizarBiometria) {
@@ -183,6 +190,7 @@ export default function ClienteIdPage({ params }: Props) {
           throw new Error("Falha em atualizar a biometria");
         }
         alert("Biometria atualizada com sucesso");
+        fetchCliente();
       } catch (error) {
         alert(error);
       }
@@ -204,6 +212,7 @@ export default function ClienteIdPage({ params }: Props) {
             throw new Error("Falha em atualizar a biometria");
           }
           alert("Biometria atualizada com sucesso");
+          fetchCliente();
         } catch (error) {
           alert(error);
         }
@@ -279,6 +288,7 @@ export default function ClienteIdPage({ params }: Props) {
           throw new Error("Falha em atualizar o documento");
         }
         alert("Documento rejeitado com sucesso");
+        fetchCliente();
       } catch (error) {
         alert(error);
       }
@@ -533,7 +543,7 @@ export default function ClienteIdPage({ params }: Props) {
                 </div>
 
                 {/* Botões do documento */}
-                {documento?.status === "AGUARDANDO" ? (
+                {documento?.status === "AGUARDANDO" || documento?.status === "ENVIADO" ? (
                   <div className="flex gap-4">
                     {atualizarDocumento ? (
                       <button
@@ -697,7 +707,7 @@ export default function ClienteIdPage({ params }: Props) {
                 </div>
 
                 {/* Botões da biometria */}
-                {biometria?.status === "AGUARDANDO" ? (
+                {biometria?.status === "ENVIADO" || biometria?.status === "ENVIADO" ? (
                   <div className="flex gap-4">
                     {atualizarBiometria ? (
                       <button
@@ -1043,9 +1053,11 @@ export default function ClienteIdPage({ params }: Props) {
                   Salvar
                 </button>
               )}
+              <Link href="/cliente">
               <button className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded">
                 Cancelar
               </button>
+              </Link>
             </div>
           </div>
         </div>
