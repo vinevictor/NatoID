@@ -24,6 +24,8 @@ export interface Cliente {
   statusAtendimento: boolean;
   statusPgto: string;
   statusdownload: string;
+  statusdocumento: string;
+  statusbiometria: string;
   telefone: string;
   telefone2: string;
   valorCd: number;

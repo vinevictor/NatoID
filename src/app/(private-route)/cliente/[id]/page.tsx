@@ -321,6 +321,7 @@ export default function ClienteIdPage({ params }: Props) {
   };
   useEffect(() => {
     fetchCliente();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleBiometriaInputChange = (
@@ -1016,7 +1017,7 @@ export default function ClienteIdPage({ params }: Props) {
                         type="text"
                         className="p-2 border border-gray-300 rounded text-black"
                         readOnly
-                        value={clienteData?.linkdownload}
+                        value={clienteData?.linkdownload || ""}
                       />
                     </div>
                     <div className="flex flex-col justify-end w-2/6">
