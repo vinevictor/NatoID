@@ -5,7 +5,7 @@ export const config = {
   matcher: "/((?!_next|favicon.ico|public|.*\\..*).*)",
 };
 
-const publicPages = ["/", "/login"];
+const publicPages = ["/login"];
 
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname

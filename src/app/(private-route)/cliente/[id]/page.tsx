@@ -7,6 +7,7 @@ import { Urls } from "@/app/types/urls.type";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
+import { LuClipboardCopy } from "react-icons/lu";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -16,9 +17,9 @@ export default function ClienteIdPage({ params }: Props) {
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [loading, setLoading] = useState(false);
   const [documento, setDocumento] = useState<Documento | null>(null);
-  console.log("🚀 ~ ClienteIdPage ~ documento:", documento)
+  console.log("🚀 ~ ClienteIdPage ~ documento:", documento);
   const [biometria, setBiometria] = useState<Biometria | null>(null);
-  console.log("🚀 ~ ClienteIdPage ~ biometria:", biometria)
+  console.log("🚀 ~ ClienteIdPage ~ biometria:", biometria);
   const [atualizarBiometria, setAtualizarBiometria] = useState(false);
   const [atualizarDocumento, setAtualizarDocumento] = useState(false);
   const [atualizarCliente, setAtualizarCliente] = useState(false);
@@ -139,7 +140,7 @@ export default function ClienteIdPage({ params }: Props) {
       } catch (error) {
         alert(error);
       }
-    }else{
+    } else {
       try {
         const response = await fetch(
           `/api/documento/patch/${documentoData.id}`,
@@ -165,8 +166,6 @@ export default function ClienteIdPage({ params }: Props) {
     setAtualizarDocumento(false);
     fetchCliente();
   };
-
-
 
   const handleAtualizarBiometria = async () => {
     if (atualizarBiometria) {
@@ -194,28 +193,28 @@ export default function ClienteIdPage({ params }: Props) {
       } catch (error) {
         alert(error);
       }
-    }else{
-        try {
-          const response = await fetch(
-            `/api/biometria/patch/${biometriaData.id}`,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                status: "APROVADO"
-              })
-            }
-          );
-          if (!response.ok) {
-            throw new Error("Falha em atualizar a biometria");
+    } else {
+      try {
+        const response = await fetch(
+          `/api/biometria/patch/${biometriaData.id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              status: "APROVADO"
+            })
           }
-          alert("Biometria atualizada com sucesso");
-          fetchCliente();
-        } catch (error) {
-          alert(error);
+        );
+        if (!response.ok) {
+          throw new Error("Falha em atualizar a biometria");
         }
+        alert("Biometria atualizada com sucesso");
+        fetchCliente();
+      } catch (error) {
+        alert(error);
+      }
     }
     setAtualizarBiometria(false);
     fetchCliente();
@@ -331,7 +330,7 @@ export default function ClienteIdPage({ params }: Props) {
   };
   useEffect(() => {
     fetchCliente();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleBiometriaInputChange = (
@@ -543,7 +542,8 @@ export default function ClienteIdPage({ params }: Props) {
                 </div>
 
                 {/* Botões do documento */}
-                {documento?.status === "AGUARDANDO" || documento?.status === "ENVIADO" ? (
+                {documento?.status === "AGUARDANDO" ||
+                documento?.status === "ENVIADO" ? (
                   <div className="flex gap-4">
                     {atualizarDocumento ? (
                       <button
@@ -707,7 +707,8 @@ export default function ClienteIdPage({ params }: Props) {
                 </div>
 
                 {/* Botões da biometria */}
-                {biometria?.status === "ENVIADO" || biometria?.status === "ENVIADO" ? (
+                {biometria?.status === "ENVIADO" ||
+                biometria?.status === "ENVIADO" ? (
                   <div className="flex gap-4">
                     {atualizarBiometria ? (
                       <button
@@ -744,7 +745,7 @@ export default function ClienteIdPage({ params }: Props) {
                       Documento Rejeitado
                     </h3>
                   </div>
-                )}  
+                )}
               </div>
             </div>
           </div>
@@ -1022,13 +1023,26 @@ export default function ClienteIdPage({ params }: Props) {
                       <label htmlFor="linkdownload" className="text-black mb-1">
                         Link Download
                       </label>
-                      <input
-                        id="linkdownload"
-                        type="text"
-                        className="p-2 border border-gray-300 rounded text-black"
-                        readOnly
-                        value={clienteData?.linkdownload || ""}
-                      />
+                      <div className="flex">
+                        <input
+                          id="linkdownload"
+                          type="text"
+                          className="p-2 border border-gray-300 rounded-l text-black w-full"
+                          readOnly
+                          value={clienteData?.linkdownload || ""}
+                        />
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              clienteData?.linkdownload || ""
+                            );
+                          }}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-r border border-gray-300 border-l-0 transition-colors"
+                          title="Copiar link"
+                        >
+                         <LuClipboardCopy />
+                        </button>
+                      </div>
                     </div>
                     <div className="flex flex-col justify-end w-2/6">
                       <button
@@ -1054,9 +1068,9 @@ export default function ClienteIdPage({ params }: Props) {
                 </button>
               )}
               <Link href="/cliente">
-              <button className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded">
-                Cancelar
-              </button>
+                <button className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded">
+                  Cancelar
+                </button>
               </Link>
             </div>
           </div>
