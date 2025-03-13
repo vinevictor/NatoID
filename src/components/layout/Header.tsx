@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 
@@ -27,7 +28,15 @@ export default function Header() {
       >
         <div className="flex gap-x-6">
         <a href="/home" className="text-sm font-semibold text-gray-900">
-            Home
+        <div className="h-fit w-fit overflow-visible">
+              <Image
+                height={144}
+                width={288}
+                src="/Logo_NatoBioID_03_1.svg"
+                alt="Logo"
+                className="h-10 w-fit object-cover"
+              />
+            </div>
           </a>
         </div>
         <div className="flex gap-x-6">

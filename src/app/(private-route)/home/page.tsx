@@ -25,7 +25,7 @@ export default function Home() {
           <MdOutlineAdminPanelSettings  className="w-10 h-10"/>
         ),
         route: "/usuario",
-        color: "bg-gray-600 hover:bg-gray   -700"
+        color: "bg-[#0d2730] hover:bg-gray-700"
       },
   ];
 
@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <header className="bg-gray-800 text-white p-4 shadow-md">
+      <header className="bg-[#0d2730] text-white p-4 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold">Sistema de Gestão</h1>
         </div>
