@@ -7,5 +7,6 @@ export interface Documento {
     criadoEm: string;
     atualizadoEm: string;
     clienteId: number;
-    status: string
+    status: string,
+    motivo: string
 }
