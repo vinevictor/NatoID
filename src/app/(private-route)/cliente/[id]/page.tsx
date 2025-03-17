@@ -3,11 +3,11 @@ import Loading from "@/app/loading";
 import { Biometria } from "@/app/types/biometria.type";
 import { Cliente } from "@/app/types/cliente.type";
 import { Documento } from "@/app/types/documeto.type";
-import { Urls } from "@/app/types/urls.type";
 import Image from "next/image";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { LuClipboardCopy } from "react-icons/lu";
+import { RiInformation2Fill } from "react-icons/ri";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -17,12 +17,98 @@ export default function ClienteIdPage({ params }: Props) {
   const [cliente, setCliente] = useState<Cliente | null>(null);
   const [loading, setLoading] = useState(false);
   const [documento, setDocumento] = useState<Documento | null>(null);
-  console.log("🚀 ~ ClienteIdPage ~ documento:", documento);
   const [biometria, setBiometria] = useState<Biometria | null>(null);
-  console.log("🚀 ~ ClienteIdPage ~ biometria:", biometria);
   const [atualizarBiometria, setAtualizarBiometria] = useState(false);
   const [atualizarDocumento, setAtualizarDocumento] = useState(false);
   const [atualizarCliente, setAtualizarCliente] = useState(false);
+
+  const [showRejectionModal, setShowRejectionModal] = useState(false);
+  const [rejectionType, setRejectionType] = useState(""); // "documento" ou "biometria"
+  const [motivo, setMotivo] = useState("");
+
+  const handleRejeitar = (type: string) => {
+    setRejectionType(type);
+    setMotivo("");
+    setShowRejectionModal(true);
+  };
+
+  const confirmRejeitar = async () => {
+    if (!motivo.trim()) {
+      alert("Por favor, informe o motivo da rejeição.");
+      return;
+    }
+
+    try {
+      if (rejectionType === "biometria") {
+        if (biometria?.dadosBiometricos) {
+          const urls = JSON.parse(biometria?.dadosBiometricos);
+          if (urls) {
+            const urldelete = urls.deleteUrl;
+            const req = await fetch(`${urldelete}`, {
+              method: "DELETE"
+            });
+            if (!req.ok) {
+              throw new Error("Falha em deletar a biometria");
+            }
+          }
+        }
+        const response = await fetch(
+          `/api/biometria/patch/${biometriaData.id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              status: "REJEITADO",
+              dadosBiometricos: null,
+              motivo: motivo
+            })
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Falha em atualizar a biometria");
+        }
+        alert("Biometria rejeitada com sucesso");
+      } else if (rejectionType === "documento") {
+        if (documento?.arquivoDocumento) {
+          const urls = JSON.parse(documento?.arquivoDocumento);
+          if (urls) {
+            const urldelete = urls.deleteUrl;
+            const req = await fetch(`${urldelete}`, {
+              method: "DELETE"
+            });
+            if (!req.ok) {
+              throw new Error("Falha em deletar o documento");
+            }
+          }
+        }
+        const response = await fetch(
+          `/api/documento/patch/${documentoData.id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              status: "REJEITADO",
+              arquivoDocumento: null,
+              motivo: motivo
+            })
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Falha em atualizar o documento");
+        }
+        alert("Documento rejeitado com sucesso");
+      }
+
+      setShowRejectionModal(false);
+      fetchCliente();
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   const formatDateToInput = (dateString: string | null) => {
     if (!dateString) return "";
@@ -75,7 +161,8 @@ export default function ClienteIdPage({ params }: Props) {
   const [biometriaData, setBiometriaData] = useState({
     id: biometria ? biometria.id : "",
     tipoBiometria: biometria ? biometria.tipoBiometria : "",
-    status: ""
+    status: "",
+    motivo: ""
   });
 
   const handleAtualizarCliente = async () => {
@@ -220,80 +307,6 @@ export default function ClienteIdPage({ params }: Props) {
     fetchCliente();
   };
 
-  const handleRejeitar = async (type: string) => {
-    if (type === "biometria") {
-      try {
-        if (biometria?.dadosBiometricos) {
-          const urls: Urls = JSON.parse(biometria?.dadosBiometricos);
-          if (urls) {
-            const urldelete = urls.deleteUrl;
-            const req = await fetch(`${urldelete}`, {
-              method: "DELETE"
-            });
-            if (!req.ok) {
-              throw new Error("Falha em deletar a biometria");
-            }
-          }
-        }
-        const response = await fetch(
-          `/api/biometria/patch/${biometriaData.id}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              status: "REJEITADO",
-              dadosBiometricos: null
-            })
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Falha em atualizar a biometria");
-        }
-        alert("Biometria rejeitada com sucesso");
-        fetchCliente();
-      } catch (error) {
-        alert(error);
-      }
-    } else if (type === "documento") {
-      try {
-        if (documento?.arquivoDocumento) {
-          const urls: Urls = JSON.parse(documento?.arquivoDocumento);
-          if (urls) {
-            const urldelete = urls.deleteUrl;
-            const req = await fetch(`${urldelete}`, {
-              method: "DELETE"
-            });
-            if (!req.ok) {
-              throw new Error("Falha em deletar o documento");
-            }
-          }
-        }
-        const response = await fetch(
-          `/api/documento/patch/${documentoData.id}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              status: "REJEITADO",
-              arquivoDocumento: null
-            })
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Falha em atualizar o documento");
-        }
-        alert("Documento rejeitado com sucesso");
-        fetchCliente();
-      } catch (error) {
-        alert(error);
-      }
-    }
-  };
-
   // URLS
   const documentoUrl = documento?.arquivoDocumento
     ? JSON.parse(documento.arquivoDocumento)
@@ -375,6 +388,47 @@ export default function ClienteIdPage({ params }: Props) {
       fetchCliente();
     } catch (error) {
       alert(error);
+    }
+  };
+
+  const handleCancelarAprovar = async (type: string) => {
+    if (type === "biometria") {
+      try {
+        const req = await fetch(`/api/biometria/patch/${biometriaData.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            status: "ENVIADO"
+          })
+        });
+        if (!req.ok) {
+          throw new Error("Falha em atualizar a biometria");
+        }
+        fetchCliente();
+      } catch (error) {
+        alert(error);
+      }
+    }
+    if (type === "documento") {
+      try {
+        const req = await fetch(`/api/documento/patch/${documentoData.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            status: "ENVIADO"
+          })
+        });
+        if (!req.ok) {
+          throw new Error("Falha em atualizar o documento");
+        }
+        fetchCliente();
+      } catch (error) {
+        alert(error);
+      }
     }
   };
 
@@ -568,16 +622,51 @@ export default function ClienteIdPage({ params }: Props) {
                     </button>
                   </div>
                 ) : documento?.status === "APROVADO" ? (
-                  <div className="flex">
-                    <h3 className="text-lg text-green-600 font-medium mb-2">
-                      Documento Aprovado
-                    </h3>
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center">
+                      <div className="w-2 h-6 bg-green-600 rounded-full mr-2"></div>
+                      <h3 className="text-lg text-green-600 font-semibold">
+                        Documento Aprovado
+                      </h3>
+                    </div>
+
+                    <div className="flex gap-4 bg-amber-50 border border-amber-200 rounded-lg shadow-md p-4 items-center">
+                      <div className="flex">
+                        <RiInformation2Fill className="w-6 h-6 text-amber-500 mt-0.5 flex-shrink-0" />
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <p className="text-gray-700 font-medium">
+                          Caso ocorra algum problema e deseje cancelar a
+                          aprovação do documento:
+                        </p>
+                        <button
+                          className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 shadow-sm flex items-center"
+                          onClick={() => handleCancelarAprovar("documento")}
+                        >
+                          <span>Cancelar</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ) : (
-                  <div className="flex">
-                    <h3 className="text-lg text-red-600 font-medium mb-2">
-                      Documento Rejeitado
-                    </h3>
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center">
+                      <div className="w-2 h-6 bg-red-600 rounded-full mr-2"></div>
+                      <h3 className="text-lg text-red-600 font-semibold">
+                        Documento Rejeitado
+                      </h3>
+                    </div>
+
+                    <div className="bg-red-50 border border-red-200 rounded-lg shadow-md p-4">
+                      <label className="block text-gray-700 font-medium mb-2">
+                        Motivo da rejeição:
+                      </label>
+                      <textarea
+                        className="w-full p-3 border border-red-200 bg-white rounded-md text-gray-700 min-h-[80px] focus:outline-none focus:ring-1 focus:ring-red-300 shadow-sm"
+                        value={documento?.motivo}
+                        readOnly
+                      ></textarea>
+                    </div>
                   </div>
                 )}
               </div>
@@ -707,7 +796,7 @@ export default function ClienteIdPage({ params }: Props) {
                 </div>
 
                 {/* Botões da biometria */}
-                {biometria?.status === "ENVIADO" ||
+                {biometria?.status === "AGUARDANDO" ||
                 biometria?.status === "ENVIADO" ? (
                   <div className="flex gap-4">
                     {atualizarBiometria ? (
@@ -734,16 +823,51 @@ export default function ClienteIdPage({ params }: Props) {
                     </button>
                   </div>
                 ) : biometria?.status === "APROVADO" ? (
-                  <div className="flex">
-                    <h3 className="text-lg text-green-600 font-medium mb-2">
-                      Documento Aprovado
-                    </h3>
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center">
+                      <div className="w-2 h-6 bg-green-600 rounded-full mr-2"></div>
+                      <h3 className="text-lg text-green-600 font-semibold">
+                        Biometria Aprovada
+                      </h3>
+                    </div>
+
+                    <div className="flex gap-4 bg-amber-50 border border-amber-200 rounded-lg shadow-md p-4 items-center">
+                      <div className="flex">
+                        <RiInformation2Fill className="w-6 h-6 text-amber-500 mt-0.5 flex-shrink-0" />
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <p className="text-gray-700 font-medium">
+                          Caso ocorra algum problema e deseje cancelar a
+                          aprovação da biometria:
+                        </p>
+                        <button
+                          className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 shadow-sm flex items-center"
+                          onClick={() => handleCancelarAprovar("biometria")}
+                        >
+                          <span>Cancelar</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ) : (
-                  <div className="flex">
-                    <h3 className="text-lg text-red-600 font-medium mb-2">
-                      Documento Rejeitado
-                    </h3>
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center">
+                      <div className="w-2 h-6 bg-red-600 rounded-full mr-2"></div>
+                      <h3 className="text-lg text-red-600 font-semibold">
+                        Biometria Rejeitada
+                      </h3>
+                    </div>
+
+                    <div className="bg-red-50 border border-red-200 rounded-lg shadow-md p-4">
+                      <label className="block text-gray-700 font-medium mb-2">
+                        Motivo da rejeição:
+                      </label>
+                      <textarea
+                        className="w-full p-3 border border-red-200 bg-white rounded-md text-gray-700 min-h-[80px] focus:outline-none focus:ring-1 focus:ring-red-300 shadow-sm"
+                        value={biometriaData?.motivo}
+                        readOnly
+                      ></textarea>
+                    </div>
                   </div>
                 )}
               </div>
@@ -1040,7 +1164,7 @@ export default function ClienteIdPage({ params }: Props) {
                           className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-r border border-gray-300 border-l-0 transition-colors"
                           title="Copiar link"
                         >
-                         <LuClipboardCopy />
+                          <LuClipboardCopy />
                         </button>
                       </div>
                     </div>
@@ -1074,6 +1198,44 @@ export default function ClienteIdPage({ params }: Props) {
               </Link>
             </div>
           </div>
+          {showRejectionModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Confirmar Rejeição
+                </h3>
+                <p className="text-gray-700 mb-4">
+                  {rejectionType === "documento" ? "Documento" : "Biometria"}{" "}
+                  será rejeitado. Por favor, informe o motivo:
+                </p>
+
+                <div className="mb-4">
+                  <textarea
+                    className="w-full p-2 border border-gray-300 rounded text-black min-h-[100px]"
+                    placeholder="Informe o motivo da rejeição..."
+                    value={motivo}
+                    onChange={(e) => setMotivo(e.target.value)}
+                  ></textarea>
+                </div>
+
+                <div className="flex justify-end gap-3">
+                  <button
+                    className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded"
+                    onClick={() => setShowRejectionModal(false)}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded disabled:bg-red-300 disabled:cursor-not-allowed"
+                    onClick={confirmRejeitar}
+                    disabled={!motivo.trim()}
+                  >
+                    Confirmar Rejeição
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
