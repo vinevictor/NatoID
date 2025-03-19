@@ -224,8 +224,9 @@ export default function ClienteIdPage({ params }: Props) {
             })
           }
         );
+        const data = await response.json();
         if (!response.ok) {
-          throw new Error("Falha em atualizar o documento");
+          throw new Error(data.message);
         }
         alert("Documento atualizado com sucesso");
         fetchCliente();
@@ -252,7 +253,7 @@ export default function ClienteIdPage({ params }: Props) {
         alert("Documento atualizado com sucesso");
         fetchCliente();
       } catch (error) {
-        alert(error);
+        alert(error instanceof Error ? error.message : "Erro desconhecido ao atualizar documento.");
       }
     }
     setAtualizarDocumento(false);
@@ -277,13 +278,14 @@ export default function ClienteIdPage({ params }: Props) {
             })
           }
         );
+        const data = await response.json();
         if (!response.ok) {
-          throw new Error("Falha em atualizar a biometria");
+          throw new Error(data.message);
         }
         alert("Biometria atualizada com sucesso");
         fetchCliente();
       } catch (error) {
-        alert(error);
+        alert(error instanceof Error ? error.message : "Erro desconhecido ao atualizar biometria.");
       }
     } else {
       try {
