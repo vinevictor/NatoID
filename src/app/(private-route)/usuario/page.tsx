@@ -14,7 +14,6 @@ import { useRouter } from 'next/navigation';
 export default function UsuariosPage() {
   const router = useRouter();
   const [usuarios, setUsuarios] = useState([] as Usuario[]);
-  console.log("🚀 ~ ClientePage ~ usuarios:", usuarios)
   const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);

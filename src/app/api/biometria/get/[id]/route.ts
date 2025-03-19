@@ -1,8 +1,9 @@
 import AuthService from "@/modules/auth/service/auth-service";
 import { NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(request: Request,  { params }: { params: Promise<{ id: string }> }) {
   try {
+    const  { id }  = await params;
     const sessionData = await AuthService.sessionUser();
     const session = sessionData.data;
 
@@ -15,7 +16,7 @@ export async function GET({ params }: { params: { id: string } }) {
     }
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/biometria/${params.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/biometria/${id}`,
       {
         method: "GET",
         headers: {
