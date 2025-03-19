@@ -29,4 +29,5 @@ export interface Cliente {
   telefone: string;
   telefone2: string;
   valorCd: number;
+  logs: string
 }
