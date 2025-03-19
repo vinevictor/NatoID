@@ -66,6 +66,7 @@ export default function ClienteIdPage({ params }: Props) {
             })
           }
         );
+
         if (!response.ok) {
           throw new Error("Falha em atualizar a biometria");
         }
@@ -185,14 +186,16 @@ export default function ClienteIdPage({ params }: Props) {
             ...(clienteData.telefone2 && { telefone2: clienteData.telefone2 })
           })
         });
+        const data = await response.json();
+
         if (!response.ok) {
-          throw new Error("Falha em atualizar o cliente");
+          throw new Error(data.message || "Erro ao atualizar cliente.");
         }
         alert("Cliente atualizado com sucesso");
         setAtualizarCliente(false);
         fetchCliente();
       } catch (error) {
-        alert(error);
+        alert(error instanceof Error ? error.message : "Erro desconhecido ao atualizar cliente.");
       }
     }
   };
