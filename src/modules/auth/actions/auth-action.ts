@@ -18,11 +18,12 @@ export async function login(formData : FormData) {
     const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
     const res = await req.json()
+    console.log("🚀 ~ login ~ res:", res)
     const  {nome, email} = res.user || {}
     const token = res.token
 
