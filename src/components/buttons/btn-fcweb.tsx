@@ -1,0 +1,44 @@
+import { Cliente } from "@/app/types/cliente.type";
+
+interface Props {
+  fetchCliente: () => void;
+  cliente: Cliente;
+}
+export default function BtnFcweb({ fetchCliente, cliente }: Props) {
+  const handleFCWB = async () => {
+    try {
+      if (!cliente) {
+        return;
+      }
+      const body = {
+        cpf: cliente.cpf,
+        nome: cliente.nome,
+        valorcd: String(cliente.valorCd),
+        telefone: cliente.telefone,
+        email: cliente.email,
+        dtnascimento: cliente.dtNascimento
+      };
+      const req = await fetch(`/api/cliente/fcweb`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      if (!req.ok) {
+        throw new Error("Falha em atualizar o documento");
+      }
+      fetchCliente();
+    } catch (error) {
+      alert(error);
+    }
+  };
+  return (
+    <button
+      className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded"
+      onClick={handleFCWB}
+    >
+      FCWB
+    </button>
+  );
+}
