@@ -37,19 +37,21 @@ export default function BiometriaCard({ id }: BiometriaCardProps) {
     }));
   };
 
-  const fetchCliente = async () => {
-    setLoading(true);
+  const fetchCliente = async (id: string) => {
     const reqBiometria = await fetch(`/api/biometria/getclienteid/${id}`);
     const resBiometria = await reqBiometria.json();
     if (!resBiometria.error) {
       setBiometria(resBiometria);
       setBiometriaData(resBiometria);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    fetchCliente();
+    setLoading(true);
+    if (id) {
+      fetchCliente(id);
+    }
+    setLoading(false);
   }, [id]);
 
   const handleAtualizarBiometria = async () => {
@@ -75,7 +77,7 @@ export default function BiometriaCard({ id }: BiometriaCardProps) {
           throw new Error(data.message);
         }
         alert("Biometria atualizada com sucesso");
-        fetchCliente();
+        fetchCliente(id);
       } catch (error) {
         alert(
           error instanceof Error
@@ -101,13 +103,13 @@ export default function BiometriaCard({ id }: BiometriaCardProps) {
           throw new Error("Falha em atualizar a biometria");
         }
         alert("Biometria atualizada com sucesso");
-        fetchCliente();
+        fetchCliente(id);
       } catch (error) {
         alert(error);
       }
     }
     setAtualizarBiometria(false);
-    fetchCliente();
+    fetchCliente(id);
   };
 
   const handleCancelarAprovar = async () => {
@@ -124,10 +126,14 @@ export default function BiometriaCard({ id }: BiometriaCardProps) {
       if (!req.ok) {
         throw new Error("Falha em atualizar a biometria");
       }
-      fetchCliente();
+      fetchCliente(id);
     } catch (error) {
       alert(error);
     }
+  };
+
+  const handleRetorno = () => {
+    fetchCliente(id);
   };
 
   return (
@@ -331,7 +337,7 @@ export default function BiometriaCard({ id }: BiometriaCardProps) {
             rejectionType="biometria"
             biometria={biometria}
             biometriaData={{ id: String(biometriaData.id) }}
-            fetchCliente={fetchCliente}
+            fetchCliente={handleRetorno}
           />
         </>
       )}

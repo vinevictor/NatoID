@@ -7,7 +7,7 @@ import Loading from "@/app/loading";
 
 interface DocumentoCardProps {
   id: string;
-  onvalue: (value: any) => void;
+  onvalue: (value: string) => void;
 }
 
 export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
@@ -28,7 +28,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
     numerodocumento: ""
   });
 
-  const fetchCliente = async () => {
+  const fetchCliente = async (id: string) => {
     setLoading(true);
     const reqDocumento = await fetch(`/api/documento/getclienteid/${id}`);
     const resDocumento = await reqDocumento.json();
@@ -42,8 +42,9 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
     }
     setLoading(false);
   };
+
   useEffect(() => {
-    fetchCliente();
+    fetchCliente(id);
   }, [id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +85,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
           throw new Error(data.message);
         }
         alert("Documento atualizado com sucesso");
-        fetchCliente();
+        fetchCliente(id);
       } catch (error) {
         alert(error);
       }
@@ -106,7 +107,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
           throw new Error("Falha em atualizar o documento");
         }
         alert("Documento atualizado com sucesso");
-        fetchCliente();
+        fetchCliente(id);
       } catch (error) {
         alert(
           error instanceof Error
@@ -116,7 +117,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
       }
     }
     setAtualizarDocumento(false);
-    fetchCliente();
+    fetchCliente(id);
   };
 
   const handleCancelarAprovar = async () => {
@@ -133,10 +134,14 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
       if (!req.ok) {
         throw new Error("Falha em atualizar o documento");
       }
-      fetchCliente();
+      fetchCliente(id);
     } catch (error) {
       alert(error);
     }
+  };
+
+  const handleRetorno = () => {
+    fetchCliente(id);
   };
 
   return (
@@ -369,7 +374,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
             rejectionType="biometria"
             documento={documento}
             documentoData={{ id: String(documentoData.id) }}
-            fetchCliente={fetchCliente}
+            fetchCliente={handleRetorno}
           />
         </>
       )}

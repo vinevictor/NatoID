@@ -1,11 +1,13 @@
+import { Biometria } from "@/app/types/biometria.type";
+import { Documento } from "@/app/types/documeto.type";
 import { useState } from "react";
 
 interface RejectionModalProps {
   isOpen: boolean;
   onClose: () => void;
   rejectionType: "documento" | "biometria";
-  biometria?: any;
-  documento?: any;
+  biometria?: Biometria | null;
+  documento?: Documento | null;
   biometriaData?: { id: string };
   documentoData?: { id: string };
   fetchCliente: () => void;
@@ -96,8 +98,8 @@ export default function RejectionModal({
       setMotivo("");
       onClose();
       fetchCliente();
-    } catch (error: any) {
-      alert(error.message || "Erro inesperado");
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Erro inesperado");
     } finally {
       setLoading(false);
     }
