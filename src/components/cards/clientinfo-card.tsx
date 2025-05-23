@@ -9,9 +9,10 @@ import { ClienteSectionCard } from "../cliente/cliente-section-card";
 
 interface Props {
   id: string;
+  arquivo: string;
 }
 
-export default function ClientInfoCard({ id }: Props) {
+export default function ClientInfoCard({ id, arquivo }: Props) {
   const [cliente, setCliente] = useState<Cliente>({} as Cliente);
   const [atualizarCliente, setAtualizarCliente] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -425,7 +426,11 @@ export default function ClientInfoCard({ id }: Props) {
         {/* Botões de ação para o cliente */}
         <div className="mt-6 flex justify-end gap-3">
           {cliente.idFcw && (
-            <BtnFcweb cliente={cliente} fetchCliente={fetchCliente} />
+            <BtnFcweb
+              cliente={cliente}
+              fetchCliente={fetchCliente}
+              arquivo={arquivo}
+            />
           )}
           {atualizarCliente && (
             <button
