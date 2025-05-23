@@ -7,9 +7,10 @@ import Loading from "@/app/loading";
 
 interface DocumentoCardProps {
   id: string;
+  onvalue: (value: any) => void;
 }
 
-export default function DocumentoCard({ id }: DocumentoCardProps) {
+export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
   const [documento, setDocumento] = useState<Documento | null>({} as Documento);
   const [atualizarDocumento, setAtualizarDocumento] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,10 @@ export default function DocumentoCard({ id }: DocumentoCardProps) {
     if (!resDocumento.error) {
       setDocumento(resDocumento);
       setDocumentoData(resDocumento);
+      if (resDocumento.arquivoDocumento) {
+        const url = JSON.parse(resDocumento.arquivoDocumento).downloadUrl;
+        onvalue(url);
+      }
     }
     setLoading(false);
   };
