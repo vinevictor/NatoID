@@ -1,5 +1,4 @@
 import { Cliente } from "@/app/types/cliente.type";
-import { useState } from "react";
 interface Props {
   cliente: Cliente;
 }

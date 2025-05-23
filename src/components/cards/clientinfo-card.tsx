@@ -35,7 +35,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
     uf: ""
   });
 
-  const fetchCliente = async () => {
+  const fetchCliente = async (id: string) => {
     setLoading(true);
     const reqCliente = await fetch(`/api/cliente/getone/${id}`);
     const resCliente = await reqCliente.json();
@@ -51,7 +51,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
     setLoading(false);
   };
   useEffect(() => {
-    fetchCliente();
+    fetchCliente(id);
   }, [id]);
 
   const formatDateToInput = (dateString: string | null) => {
@@ -99,7 +99,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
       if (!req.ok) {
         throw new Error("Falha em gerar o link");
       }
-      fetchCliente();
+      fetchCliente(id);
     } catch (error) {
       alert(error);
     }
@@ -131,7 +131,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
         }
         alert("Cliente atualizado com sucesso");
         setAtualizarCliente(false);
-        fetchCliente();
+        fetchCliente(id);
       } catch (error) {
         alert(
           error instanceof Error
@@ -140,6 +140,10 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
         );
       }
     }
+  };
+
+  const handleRetorno = () => {
+    fetchCliente(id);
   };
 
   return (
@@ -428,7 +432,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
           {cliente.idFcw && (
             <BtnFcweb
               cliente={cliente}
-              fetchCliente={fetchCliente}
+              fetchCliente={handleRetorno}
               arquivo={arquivo}
             />
           )}
