@@ -25,7 +25,9 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
     id: "",
     tipodocumento: "",
     validade: "",
-    numerodocumento: ""
+    numerodocumento: "",
+    criadoEm: "",
+    atualizadoEm: ""
   });
 
   const fetchCliente = async (id: string) => {

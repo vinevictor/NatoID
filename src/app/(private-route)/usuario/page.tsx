@@ -9,7 +9,7 @@ import {
   TableCell
 } from "@/components/table/tablecomponent";
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 export default function UsuariosPage() {
   const router = useRouter();
@@ -19,7 +19,6 @@ export default function UsuariosPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const usuariosPorPagina = 20;
-
 
   useEffect(() => {
     fetchTable();
@@ -52,15 +51,15 @@ export default function UsuariosPage() {
   };
 
   const handleCadastrarUsuario = () => {
-    router.push('/usuario/cadastro');
+    router.push("/usuario/cadastro");
   };
 
   const filteredUsuarios = usuarios.filter((usuario) => {
-    const matchesNome =
-      usuario.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesNome = usuario.nome
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
 
-    return matchesNome
-    ;
+    return matchesNome;
   });
 
   const indexOfLastUsuario = currentPage * usuariosPorPagina;
@@ -132,7 +131,7 @@ export default function UsuariosPage() {
                     />
                   </div>
                 </div>
-                </div>
+              </div>
 
               <div className="flex justify-between">
                 <button
@@ -155,7 +154,7 @@ export default function UsuariosPage() {
               <TableContainer>
                 <Table className="min-w-full">
                   <TableHeader className="bg-gray-800">
-                  <TableCell isHeader className="text-white font-semibold">
+                    <TableCell isHeader className="text-white font-semibold">
                       ID
                     </TableCell>
                     <TableCell isHeader className="text-white font-semibold">
@@ -171,14 +170,13 @@ export default function UsuariosPage() {
                   <tbody>
                     {currentUsuarios.length > 0 ? (
                       currentUsuarios.map((usuario: Usuario) => (
-                        
                         <TableRow
                           key={usuario.id}
                           className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
-                        >                          
-                        <TableCell className="font-medium text-gray-900">
-                        {usuario.id}
-                      </TableCell>
+                        >
+                          <TableCell className="font-medium text-gray-900">
+                            {usuario.id}
+                          </TableCell>
                           <TableCell className="font-medium text-gray-900">
                             {usuario.nome}
                           </TableCell>
@@ -186,7 +184,11 @@ export default function UsuariosPage() {
                             {usuario.email}
                           </TableCell>
                           <TableCell className="text-gray-700">
-                            {usuario.criadoEm.split("T")[0].split("-").reverse().join("/")}
+                            {usuario.criadoEm
+                              .split("T")[0]
+                              .split("-")
+                              .reverse()
+                              .join("/")}
                           </TableCell>
                         </TableRow>
                       ))

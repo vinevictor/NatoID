@@ -1,3 +1,4 @@
+"use client";
 import Loading from "@/app/loading";
 import { Cliente } from "@/app/types/cliente.type";
 import Link from "next/link";
@@ -68,7 +69,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
     nome: "",
     cpf: "",
     dtNascimento: cliente?.dtNascimento
-      ? formatDateToInput(cliente.dtNascimento)
+      ? formatDateToInput(cliente?.dtNascimento)
       : "",
     email: "",
     telefone: "",
@@ -78,7 +79,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
     linkdownload: "",
     logs: ""
   });
-
+  console.log("🚀 ~ ClientInfoCard ~ clienteData:", clienteData);
   const handleClienteInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAtualizarCliente(true);
     const { id, value } = e.target;
@@ -189,7 +190,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
                     id="dtNascimento"
                     type="date"
                     className="p-2 border border-gray-300 rounded text-black"
-                    value={clienteData?.dtNascimento.split("T")[0]}
+                    value={clienteData?.dtNascimento}
                     onChange={(e) => handleClienteInputChange(e)}
                   />
                 </div>
