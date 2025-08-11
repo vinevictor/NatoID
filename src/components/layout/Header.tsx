@@ -3,22 +3,21 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-
 export default function Header() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    try{
-      const res = await fetch('/api/logout');
+    try {
+      const res = await fetch("/api/logout");
       if (!res.ok) {
-        alert('Erro ao fazer logout')
+        alert("Erro ao fazer logout");
       } else {
-        router.push('/login')
+        router.push("/login");
       }
-    }catch(error){
-        alert(error)
+    } catch (error) {
+      alert(error);
     }
-  }
+  };
 
   return (
     <header className="bg-white shadow">
@@ -27,8 +26,8 @@ export default function Header() {
         aria-label="Global"
       >
         <div className="flex gap-x-6">
-        <a href="/home" className="text-sm font-semibold text-gray-900">
-        <div className="h-fit w-fit overflow-visible">
+          <a href="/home" className="text-sm font-semibold text-gray-900">
+            <div className="h-fit w-fit overflow-visible">
               <Image
                 height={144}
                 width={288}
@@ -43,7 +42,10 @@ export default function Header() {
           <a href="/login" className="text-sm font-semibold text-gray-900">
             Login
           </a>
-          <button className="text-sm font-semibold text-gray-900" onClick={handleLogout}>
+          <button
+            className="text-sm font-semibold text-gray-900"
+            onClick={handleLogout}
+          >
             Logout
           </button>
         </div>
