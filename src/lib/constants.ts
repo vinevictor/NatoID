@@ -1,3 +1,4 @@
 export const CLIENTES_POR_PAGINA = 20;
 export const STATUS_GERAIS = ["AGUARDANDO", "APROVADO", "REJEITADO", "ENVIADO"];
 export const STATUS_CLIENTE = ["INICIADO", "EMITIDO"];
+export const USUARIOS_POR_PAGINA = 20;
