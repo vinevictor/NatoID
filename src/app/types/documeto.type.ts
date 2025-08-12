@@ -1,12 +1,30 @@
+export type DocumentoStatus =
+  | "AGUARDANDO"
+  | "ENVIADO"
+  | "APROVADO"
+  | "REJEITADO";
+
+export interface ArquivoInfo {
+  downloadUrl: string;
+  viewUrl: string;
+}
+
 export interface Documento {
-    id: number;
-    tipoDocumento: string;
-    numeroDocumento: string;
-    validade: string;
-    arquivoDocumento: string;
-    criadoEm: string;
-    atualizadoEm: string;
-    clienteId: number;
-    status: string,
-    motivo: string
+  id: string;
+  clienteId: string;
+
+  tipoDocumento: string;
+  numeroDocumento: string;
+
+  validade: Date | string;
+  criadoEm: Date | string;
+  atualizadoEm: Date | string;
+
+  status: DocumentoStatus;
+
+  arquivoDocumento: string | null;
+
+  motivo?: string;
+
+  error?: boolean;
 }
