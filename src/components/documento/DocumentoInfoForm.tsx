@@ -56,7 +56,7 @@ export const DocumentoInfoForm = ({
         <FormField
           label="Tipo Documento"
           id="tipoDocumento"
-          value={documentoData.tipoDocumento}
+          value={documentoData.tipoDocumento || ""}
           onChange={onInputChange}
           readOnly={isReadOnly}
         />
@@ -71,7 +71,7 @@ export const DocumentoInfoForm = ({
         <FormField
           label="Número do Documento"
           id="numeroDocumento"
-          value={documentoData.numeroDocumento}
+          value={documentoData.numeroDocumento || ""}
           onChange={onInputChange}
           readOnly={isReadOnly}
         />

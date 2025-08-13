@@ -1,5 +1,5 @@
 "use client";
-import BiometriaCard from "@/components/cards/biometria-card";
+import BiometriaCard from "@/components/biometria/BiometriaCard";
 import ClientInfoCard from "@/components/cards/clientinfo-card";
 import DocumentoCard from "@/components/documento/DocumentoCard";
 

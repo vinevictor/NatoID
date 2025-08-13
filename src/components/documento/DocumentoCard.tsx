@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Loading from "@/app/loading";
 import { useDocumento } from "@/hooks/useDocumento";
 import { Documento } from "@/app/types/documeto.type";
@@ -13,7 +13,7 @@ import { DocumentoActions } from "./DocumentoActions";
 import RejectionModal from "../cards/rejection-modal";
 
 interface DocumentoCardProps {
-  id: string;
+  id: string; // ID do Cliente
   onvalue: (value: string) => void;
 }
 
@@ -22,6 +22,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
     documento,
     loading,
     error,
+    isFound,
     fetchDocumento,
     updateDocumentoStatus,
     updateDocumentoData
@@ -32,28 +33,32 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
   const [showRejectionModal, setShowRejectionModal] = useState(false);
 
   useEffect(() => {
-    if (documento) {
-      setFormData(documento);
-      setHasChanges(false);
-    }
+    setFormData(documento || {});
+    setHasChanges(false);
   }, [documento]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHasChanges(true);
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
+  // DocumentoCard.tsx
   const handleApprove = () => {
     if (hasChanges) {
-      updateDocumentoData(formData);
+      updateDocumentoData({ ...formData, status: "APROVADO" });
     } else {
       updateDocumentoStatus("APROVADO");
     }
   };
 
-  if (loading) return <Loading />;
-  if (error) return <div className="text-red-500">Erro: {error}</div>;
+  if (loading) {
+    return (
+      <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold text-black mb-4">Documento</h2>
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full md:w-1/2 bg-white rounded-lg shadow-md p-6">
@@ -65,12 +70,16 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
         documentoData={formData}
         onInputChange={handleInputChange}
         isReadOnly={
-          documento?.status === "APROVADO" || documento?.status === "REJEITADO"
+          !isFound ||
+          !documento ||
+          ["APROVADO", "REJEITADO"].includes(documento.status)
         }
       />
 
       <DocumentoActions
         documento={documento}
+        isFound={isFound}
+        error={error}
         hasChanges={hasChanges}
         onApprove={handleApprove}
         onReject={() => setShowRejectionModal(true)}
@@ -80,7 +89,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
       <RejectionModal
         isOpen={showRejectionModal}
         onClose={() => setShowRejectionModal(false)}
-        rejectionType="documento" // Ajuste conforme necessário
+        rejectionType="documento"
         documento={documento}
         documentoData={{ id: String(documento?.id) }}
         fetchCliente={fetchDocumento}

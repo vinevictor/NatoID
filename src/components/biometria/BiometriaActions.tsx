@@ -1,12 +1,12 @@
-// /app/(sua-pagina)/components/DocumentoActions.tsx
+// /app/(sua-pagina)/components/BiometriaActions.tsx
 
 import React from "react";
-import { Documento } from "@/app/types/documeto.type";
+import { Biometria } from "@/app/types/biometria.type";
 import { StateMessage } from "@/components/ui/StateMessage";
 import { RiInformation2Fill } from "react-icons/ri";
 
-interface DocumentoActionsProps {
-  documento: Documento | null;
+interface BiometriaActionsProps {
+  biometria: Biometria | null;
   isFound: boolean;
   error: string | null;
   hasChanges: boolean;
@@ -15,15 +15,15 @@ interface DocumentoActionsProps {
   onCancelApproval: () => void;
 }
 
-export const DocumentoActions = ({
-  documento,
+export const BiometriaActions = ({
+  biometria,
   isFound,
   error,
   hasChanges,
   onApprove,
   onReject,
   onCancelApproval
-}: DocumentoActionsProps) => {
+}: BiometriaActionsProps) => {
   if (error) {
     return (
       <StateMessage type="error" title="Erro ao Carregar" message={error} />
@@ -34,25 +34,25 @@ export const DocumentoActions = ({
     return (
       <StateMessage
         type="info"
-        title="Documento não Encontrado"
-        message="Nenhum documento foi localizado para este cliente."
+        title="Biometria não Encontrada"
+        message="Nenhuma biometria foi localizada para este cliente."
       />
     );
   }
 
-  if (!documento) return null;
+  if (!biometria) return null;
 
-  const documentoUrl = documento.arquivoDocumento
-    ? JSON.parse(documento.arquivoDocumento)
+  const biometriaUrl = biometria.dadosBiometricos
+    ? JSON.parse(biometria.dadosBiometricos)
     : null;
 
-  const renderStatus = () => {
-    switch (documento.status) {
+  const renderStatusActions = () => {
+    switch (biometria.status) {
       case "APROVADO":
         return (
           <div className="flex flex-col space-y-3">
             <h3 className="text-lg text-green-600 font-semibold border-l-4 border-green-600 pl-2">
-              Documento Aprovado
+              Biometria Aprovada
             </h3>
             <div className="flex items-center gap-4 bg-amber-50 border border-amber-200 rounded-lg p-4">
               <RiInformation2Fill className="w-6 h-6 text-amber-500 flex-shrink-0" />
@@ -70,7 +70,7 @@ export const DocumentoActions = ({
         return (
           <div className="flex flex-col space-y-3">
             <h3 className="text-lg text-red-600 font-semibold border-l-4 border-red-600 pl-2">
-              Documento Rejeitado
+              Biometria Rejeitada
             </h3>
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <label className="block text-gray-700 font-medium mb-2">
@@ -78,7 +78,7 @@ export const DocumentoActions = ({
               </label>
               <textarea
                 className="w-full p-2 border rounded-md"
-                value={documento.motivo}
+                value={biometria.motivo}
                 readOnly
               />
             </div>
@@ -110,13 +110,13 @@ export const DocumentoActions = ({
         <h3 className="text-lg font-medium mb-2 text-black">Opções</h3>
         <div className="flex gap-4">
           <a
-            href={documentoUrl?.downloadUrl}
+            href={biometriaUrl?.downloadUrl}
             className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
           >
             Download
           </a>
           <a
-            href={documentoUrl?.viewUrl}
+            href={biometriaUrl?.viewUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded"
@@ -125,7 +125,7 @@ export const DocumentoActions = ({
           </a>
         </div>
       </div>
-      {renderStatus()}
+      {renderStatusActions()}
     </div>
   );
 };
