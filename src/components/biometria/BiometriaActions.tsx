@@ -26,7 +26,11 @@ export const BiometriaActions = ({
 }: BiometriaActionsProps) => {
   if (error) {
     return (
-      <StateMessage type="error" title="Erro ao Carregar" message={error} />
+      <StateMessage
+        type="error"
+        title="Erro ao Carregar"
+        message={"Nenhuma biometria foi localizada para este cliente."}
+      />
     );
   }
 

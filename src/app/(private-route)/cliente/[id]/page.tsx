@@ -1,6 +1,6 @@
 "use client";
 import BiometriaCard from "@/components/biometria/BiometriaCard";
-import ClientInfoCard from "@/components/cards/clientinfo-card";
+import ClientInfoCard from "@/components/cliente/ClientInfoCard";
 import DocumentoCard from "@/components/documento/DocumentoCard";
 
 import { use, useState } from "react";

@@ -32,8 +32,8 @@ export const useClientesData = () => {
       );
 
       const dataFinal = clientesJson.map((cliente): ClienteDetalhado => {
-        const documento = documentosMap.get(cliente.id);
-        const biometria = biometriasMap.get(cliente.id);
+        const documento = documentosMap.get(String(cliente.id));
+        const biometria = biometriasMap.get(String(cliente.id));
 
         return {
           ...cliente,

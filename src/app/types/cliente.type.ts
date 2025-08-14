@@ -12,7 +12,7 @@ export interface Cliente {
   cpf: string;
   docSuspenso: null;
   dtCriacaoNow: null;
-  dtNascimento: string;
+  dtNascimento: string | Date;
   dtSolicitacao: string;
   email: string;
   empreendimento: string;
@@ -29,5 +29,5 @@ export interface Cliente {
   telefone: string;
   telefone2: string;
   valorCd: number;
-  logs: string
+  logs: string;
 }
