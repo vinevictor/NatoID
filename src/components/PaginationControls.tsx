@@ -1,4 +1,3 @@
-
 import React from "react";
 
 interface PaginationControlsProps {
@@ -35,7 +34,7 @@ export const PaginationControls = React.memo(
         >
           Anterior
         </button>
-        <span className="px-3 py-1">{`Página ${currentPage} de ${
+        <span className="px-3 py-1 rounded-md bg-white text-gray-700">{`Página ${currentPage} de ${
           totalPages || 1
         }`}</span>
         <button

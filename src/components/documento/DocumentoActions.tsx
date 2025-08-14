@@ -26,7 +26,11 @@ export const DocumentoActions = ({
 }: DocumentoActionsProps) => {
   if (error) {
     return (
-      <StateMessage type="error" title="Erro ao Carregar" message={error} />
+      <StateMessage
+        type="error"
+        title="Erro ao Carregar"
+        message={"Nenhum documento foi localizado para este cliente."}
+      />
     );
   }
 
