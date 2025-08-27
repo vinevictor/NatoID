@@ -1,13 +1,17 @@
-import AuthService from "@/modules/auth/service/auth-service"
-import { NextResponse } from "next/server"
+import AuthService from "@/modules/auth/service/auth-service";
+import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function GET(request: any) {
-        await AuthService.destroySession()
+export async function GET(request: NextRequest) {
+  try {
+    await AuthService.destroySession();
+  } catch (error) {
+    alert("ERRO AO DESTRUIR A SESSÃO:" + error);
 
-        const loginUrl = new URL('/login', request.nextUrl.origin);
+    const loginUrl = new URL("/login", request.nextUrl.origin);
+    return NextResponse.redirect(loginUrl);
+  }
 
-        return NextResponse.redirect(loginUrl);
-    
- 
+  const loginUrl = new URL("/login", request.nextUrl.origin);
+  return NextResponse.redirect(loginUrl);
 }

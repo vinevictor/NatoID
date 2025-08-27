@@ -149,9 +149,9 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
             <FormField
               label="Cidade"
               id="empreendimentoCidade"
-              value={`${cliente.empreendimentoData?.cidade || ""} - ${
-                cliente.empreendimentoData?.uf || ""
-              }`}
+              value={`${cliente.empreendimentoData?.cidade || ""} ${
+                cliente.empreendimentoData?.uf ? "-" : " "
+              }${cliente.empreendimentoData?.uf || ""}`}
               readOnly
             />
           </ClienteSectionCard>
@@ -179,6 +179,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
                   value={cliente.linkdownload}
                 />
                 <button
+                  color="blue"
                   onClick={() =>
                     navigator.clipboard.writeText(cliente.linkdownload || "")
                   }
