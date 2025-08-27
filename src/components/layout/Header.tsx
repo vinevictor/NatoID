@@ -1,22 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const router = useRouter();
-
   const handleLogout = async () => {
-    try {
-      const res = await fetch("/api/logout");
-      if (!res.ok) {
-        alert("Erro ao fazer logout");
-      } else {
-        router.push("/login");
-      }
-    } catch (error) {
-      alert(error);
-    }
+    await fetch("/api/logout");
   };
 
   return (
