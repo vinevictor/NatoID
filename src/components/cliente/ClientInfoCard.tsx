@@ -200,7 +200,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
         </div>
 
         <div className="mt-6 flex justify-end items-center gap-3 border-t pt-4">
-          {cliente.idFcw && (
+          {!cliente.idFcw && (
             <BtnFcweb
               cliente={cliente}
               fetchCliente={fetchCliente}
