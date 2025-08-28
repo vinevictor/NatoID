@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     const req = await request.json();
     const pass = Buffer.from(`${process.env.FCWBPASS}`).toString("base64");
-    const { documento, id, ...rest } = req;
+    const { id, ...rest } = req;
     const sessionData = await AuthService.sessionUser();
     const session = sessionData.data;
 

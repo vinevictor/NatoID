@@ -3,9 +3,8 @@ import { Cliente } from "@/app/types/cliente.type";
 interface Props {
   fetchCliente: () => void;
   cliente: Cliente;
-  arquivo: string;
 }
-export default function BtnFcweb({ fetchCliente, cliente, arquivo }: Props) {
+export default function BtnFcweb({ fetchCliente, cliente }: Props) {
   const handleFCWB = async () => {
     try {
       if (!cliente) {
@@ -18,8 +17,7 @@ export default function BtnFcweb({ fetchCliente, cliente, arquivo }: Props) {
         valorcd: String(cliente.valorCd),
         telefone: cliente.telefone,
         email: cliente.email,
-        dtnascimento: cliente.dtNascimento,
-        documento: arquivo || ""
+        dtnascimento: cliente.dtNascimento
       };
       const req = await fetch(`/api/cliente/fcweb`, {
         method: "POST",
