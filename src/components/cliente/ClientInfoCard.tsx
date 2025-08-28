@@ -15,10 +15,9 @@ import Logs from "../cards/logs";
 
 interface Props {
   id: string;
-  arquivo: string;
 }
 
-export default function ClientInfoCard({ id, arquivo }: Props) {
+export default function ClientInfoCard({ id }: Props) {
   const {
     cliente,
     loading,
@@ -201,11 +200,7 @@ export default function ClientInfoCard({ id, arquivo }: Props) {
 
         <div className="mt-6 flex justify-end items-center gap-3 border-t pt-4">
           {!cliente.idFcw && (
-            <BtnFcweb
-              cliente={cliente}
-              fetchCliente={fetchCliente}
-              arquivo={arquivo}
-            />
+            <BtnFcweb cliente={cliente} fetchCliente={fetchCliente} />
           )}
           {hasChanges && (
             <button

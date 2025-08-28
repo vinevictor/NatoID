@@ -14,10 +14,9 @@ import RejectionModal from "../cards/rejection-modal";
 
 interface DocumentoCardProps {
   id: string; // ID do Cliente
-  onvalue: (value: string) => void;
 }
 
-export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
+export default function DocumentoCard({ id }: DocumentoCardProps) {
   const {
     documento,
     loading,
@@ -26,7 +25,7 @@ export default function DocumentoCard({ id, onvalue }: DocumentoCardProps) {
     fetchDocumento,
     updateDocumentoStatus,
     updateDocumentoData
-  } = useDocumento(id, onvalue);
+  } = useDocumento(id);
 
   const [formData, setFormData] = useState<Partial<Documento>>({});
   const [hasChanges, setHasChanges] = useState(false);

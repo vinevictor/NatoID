@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Documento } from "@/app/types/documeto.type";
 
-export const useDocumento = (
-  clienteId: string,
-  onDocumentoUrlChange: (url: string) => void
-) => {
+export const useDocumento = (clienteId: string) => {
   const [documento, setDocumento] = useState<Documento | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,14 +30,6 @@ export const useDocumento = (
       if (data && !data.error) {
         setDocumento(data);
         setIsFound(true);
-        if (data.arquivoDocumento) {
-          try {
-            const url = JSON.parse(data.arquivoDocumento).downloadUrl;
-            onDocumentoUrlChange(url);
-          } catch (e) {
-            console.error("Erro ao parsear o JSON do arquivoDocumento:", e);
-          }
-        }
       } else {
         setDocumento(null);
         setIsFound(false);
@@ -53,7 +42,7 @@ export const useDocumento = (
     } finally {
       setLoading(false);
     }
-  }, [clienteId, onDocumentoUrlChange]);
+  }, [clienteId]);
 
   useEffect(() => {
     fetchDocumento();
