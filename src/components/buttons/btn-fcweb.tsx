@@ -12,6 +12,7 @@ export default function BtnFcweb({ fetchCliente, cliente, arquivo }: Props) {
         return;
       }
       const body = {
+        id: cliente.id,
         cpf: cliente.cpf,
         nome: cliente.nome,
         valorcd: String(cliente.valorCd),
@@ -30,6 +31,7 @@ export default function BtnFcweb({ fetchCliente, cliente, arquivo }: Props) {
       if (!req.ok) {
         throw new Error("Falha em atualizar o documento");
       }
+      alert("Fcweb Criada com sucesso");
       fetchCliente();
     } catch (error) {
       alert(error);
