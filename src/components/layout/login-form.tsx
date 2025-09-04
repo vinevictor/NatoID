@@ -15,14 +15,14 @@ export default function LoginForm() {
   return (
     <div className="h-full w-full bg-gray-100 flex items-center justify-center p-4">
       <div className="h-full max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <div className="flex w-full h-full justify-center" >
-            <Image
-              height={100}
-              width={100}
-              src="/Logo_NatoBioID_01.svg"
-              alt="Logo"
-              className="mx-auto h-36 w-auto"
-            />
+        <div className="flex w-full h-full justify-center">
+          <Image
+            height={100}
+            width={100}
+            src="/Logo_NatoBioID_01.svg"
+            alt="Logo"
+            className="mx-auto h-36 w-auto"
+          />
         </div>
 
         <form className="space-y-4" action={handleSubmit}>
